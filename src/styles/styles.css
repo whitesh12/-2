@@ -1,0 +1,21 @@
+.app {
+  padding: 20px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-card,
+.detail-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
