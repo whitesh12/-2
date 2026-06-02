@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<!-- saved from url=(0144)http://192.168.123.45:5501/%EB%B6%80%EC%B2%9C%EC%8B%9C%ED%99%9C%EB%B0%95%EB%AC%BC%EA%B4%80-%EA%B1%B4%ED%98%B8%20%EB%8F%84%EC%8A%A8%ED%8A%B8.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>부천시 활박물관 — 건호 도슨트</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+/* ── 다크모드 강제 (시스템 설정 무관) ── */
+:root {
+  color-scheme: only dark;
+  --bg:      #0c0c10;
+  --bg2:     #12121a;
+  --bg3:     #181824;
+  --card:    #1c1c28;
+  --gold:    #c8a84b;
+  --gold2:   #e8cc80;
+  --gold3:   #f0dfa0;
+  --text:    #ede8dc;
+  --text2:   #9a8f7a;
+  --bubble:  #16202e;
+  --bline:   rgba(100,160,230,0.35);
+  --border:  rgba(200,168,75,0.2);
+}
+html, body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  -webkit-text-fill-color: var(--text);
+}
+body {
+  font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ────────── 공통 ────────── */
+.scene {
+  width: 100%;
+  min-height: 100svh;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+.section-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.25;
+}
+
+/* 말풍선 공통 */
+.bubble {
+  background: var(--bubble);
+  border: 1.5px solid var(--bline);
+  border-radius: 16px;
+  padding: 15px 17px;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  position: relative;
+}
+.bubble b { color: var(--gold2); -webkit-text-fill-color: var(--gold2); font-weight:600; }
+.bubble em { color: #8ecfff; -webkit-text-fill-color:#8ecfff; font-style:normal; }
+
+/* 말풍선 꼬리 - 아래 왼쪽 */
+.bubble.tail-bl::after {
+  content:''; position:absolute; bottom:-9px; left:22px;
+  border-left:9px solid transparent;
+  border-right:9px solid transparent;
+  border-top:9px solid var(--bline);
+}
+/* 말풍선 꼬리 - 아래 오른쪽 */
+.bubble.tail-br::after {
+  content:''; position:absolute; bottom:-9px; right:22px;
+  border-left:9px solid transparent;
+  border-right:9px solid transparent;
+  border-top:9px solid var(--bline);
+}
+/* 말풍선 꼬리 - 오른쪽 중간 (캐릭터 왼쪽에 버블) */
+.bubble.tail-r::after {
+  content:''; position:absolute; top:22px; right:-9px;
+  border-top:9px solid transparent;
+  border-bottom:9px solid transparent;
+  border-left:9px solid var(--bline);
+}
+/* 진행 도트 */
+.pdots {
+  position:fixed; right:12px; top:50%; transform:translateY(-50%);
+  z-index:999; display:flex; flex-direction:column; gap:7px;
+}
+.pdot {
+  width:5px; height:5px; border-radius:3px;
+  background:rgba(200,168,75,0.25); transition:all .3s;
+}
+.pdot.on { height:18px; background:var(--gold); }
+
+/* ════════════════════════════
+   씬 1 — 인트로 (인사하는 건호)
+   캐릭터: 정면, 오른손 위로 손 흔들기
+   레이아웃: 캐릭터 하단 중앙 + 말풍선 위
+   ════════════════════════════ */
+#s1 {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  padding-bottom:0;
+  background: radial-gradient(ellipse 90% 60% at 50% 100%, rgba(180,140,50,0.07) 0%, transparent 70%),
+              linear-gradient(180deg,#08080f 0%,var(--bg) 100%);
+}
+.s1-badge {
+  position:absolute; top:40px; left:50%; transform:translateX(-50%);
+  text-align:center; z-index:10; opacity:0;
+}
+.s1-badge .bl { width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 5px; }
+.s1-badge .bt { font-size:9.5px;letter-spacing:.32em;color:var(--gold);font-weight:300; -webkit-text-fill-color:var(--gold); }
+.s1-badge .bk { font-size:11px;color:rgba(200,168,75,.55);letter-spacing:.12em;margin-top:3px; -webkit-text-fill-color:rgba(200,168,75,.55); }
+
+.s1-bubble-wrap {
+  width:100%; padding:0 22px; z-index:20; opacity:0;
+}
+.s1-char {
+  z-index:10; opacity:0; margin-top:-20px;
+  display:flex; justify-content:center;
+}
+.s1-char img { height:320px; width:auto; filter:drop-shadow(0 6px 20px rgba(0,0,0,.6)); }
+
+.scroll-hint {
+  position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+  z-index:20; display:flex; flex-direction:column; align-items:center; gap:5px; opacity:0;
+}
+.scroll-hint span { font-size:9px;letter-spacing:.25em;color:var(--text2); -webkit-text-fill-color:var(--text2); }
+.sh-arrow { width:18px;height:18px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);animation:abounce 1.4s infinite; }
+@keyframes abounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(5px)} }
+
+/* ════════════════════════════
+   씬 2 — 챕터 타이틀
+   ════════════════════════════ */
+#s2 {
+  display:flex; flex-direction:column;
+  justify-content:center; padding:70px 28px 60px;
+  background:linear-gradient(180deg,var(--bg2) 0%,var(--bg3) 100%);
+}
+.ch-label { font-size:10px;letter-spacing:.4em;color:var(--gold);margin-bottom:10px;opacity:0; -webkit-text-fill-color:var(--gold); text-transform:uppercase; }
+.ch-title { font-size:38px;font-weight:700;line-height:1.2;margin-bottom:6px;opacity:0; }
+.ch-title span { color:var(--gold); -webkit-text-fill-color:var(--gold); }
+.ch-en { font-size:12px;color:var(--text2);letter-spacing:.18em;opacity:0; -webkit-text-fill-color:var(--text2); }
+.ch-rule { width:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:18px 0; }
+.ch-desc { font-size:14px;line-height:1.9;color:var(--text2);opacity:0; -webkit-text-fill-color:var(--text2); }
+
+/* ════════════════════════════
+   씬 3 — 유물 사진 (누끼 없음)
+   ════════════════════════════ */
+#s3 {
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:60px 24px;
+  background:var(--bg);
+}
+.artifact-glow {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(180,140,50,.12) 0%,transparent 70%);
+}
+.artifact-frame {
+  position:relative; z-index:2; opacity:0; transform:scale(.88);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 0 50px rgba(180,140,50,.12), 0 20px 40px rgba(0,0,0,.5);
+  max-width:320px; width:90vw;
+}
+.artifact-frame img {
+  width:100%; border-radius:10px;
+  display:block;
+}
+.artifact-caption {
+  margin-top:14px; text-align:center; z-index:2; opacity:0;
+}
+.artifact-caption h2 { font-size:20px;font-weight:700;color:var(--gold2); -webkit-text-fill-color:var(--gold2); margin-bottom:3px; }
+.artifact-caption p { font-size:11px;letter-spacing:.18em;color:var(--text2); -webkit-text-fill-color:var(--text2); text-transform:uppercase; }
+
+/* ════════════════════════════
+   씬 4 — 각궁 설명 (각궁 든 태용)
+   캐릭터: 정면, 각궁을 양손으로 들고 있음
+   → 캐릭터 하단, 텍스트 위에
+   ════════════════════════════ */
+#s4 {
+  display:flex; flex-direction:column;
+  align-items:center;
+  padding-top:50px;
+  background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 100%);
+}
+.s4-char { opacity:0; z-index:5; }
+.s4-char img { height:300px; width:auto; filter:drop-shadow(0 8px 24px rgba(0,0,0,.6)); }
+
+.s4-cards {
+  width:100%; padding:16px 20px 50px; z-index:10;
+}
+.info-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:14px;
+  opacity:0; transform:translateY(24px);
+  box-shadow:0 3px 16px rgba(0,0,0,.3);
+}
+.info-card h3 { font-size:11px;letter-spacing:.22em;color:var(--gold);margin-bottom:10px; -webkit-text-fill-color:var(--gold); text-transform:uppercase; }
+.info-card p { font-size:14px;line-height:1.85;color:var(--text); -webkit-text-fill-color:var(--text); }
+.info-card p b { color:var(--gold2); -webkit-text-fill-color:var(--gold2); }
+.mat-row { display:flex;flex-wrap:wrap;gap:7px;margin-top:12px; }
+.mat-chip {
+  background:rgba(200,168,75,.1); border:1px solid rgba(200,168,75,.28);
+  border-radius:20px; padding:5px 11px;
+  font-size:12px; color:var(--gold2); -webkit-text-fill-color:var(--gold2);
+  opacity:0;
+}
+
+/* ════════════════════════════
+   씬 5 — 손가락 포인팅 (왼쪽 봄 + 왼쪽 손가락)
+   캐릭터: 오른쪽 배치 → 텍스트: 왼쪽
+   ════════════════════════════ */
+#s5 {
+  position:relative;
+  min-height:100svh;
+  background:var(--bg2);
+  overflow:hidden;
+}
+.s5-char {
+  position:absolute;
+  bottom:0; right:-15px;
+  z-index:3; opacity:0;
+}
+.s5-char img {
+  height:72svh; max-height:500px; width:auto;
+  filter:drop-shadow(-6px 0 18px rgba(0,0,0,.55));
+}
+.s5-content {
+  position:relative; z-index:10;
+  padding:56px 20px 24px;
+  /* 왼쪽 절반만 사용 (캐릭터가 오른쪽에 있으므로) */
+  width:58%;
+}
+.fact-block {
+  margin-bottom:20px; opacity:0; transform:translateX(-18px);
+}
+.fact-block h4 {
+  font-size:13px; font-weight:700; color:var(--gold2); -webkit-text-fill-color:var(--gold2);
+  margin-bottom:5px;
+  display:flex; align-items:center; gap:7px;
+}
+.fact-block p { font-size:13px;line-height:1.75;color:var(--text2); -webkit-text-fill-color:var(--text2); }
+.fact-icon { font-size:16px; }
+
+/* ════════════════════════════
+   씬 6 — 옆모습 안내 (왼쪽 봄 + 왼손 내밀기)
+   캐릭터: 오른쪽 → 텍스트: 왼쪽
+   ════════════════════════════ */
+#s6 {
+  position:relative;
+  min-height:100svh;
+  background:linear-gradient(180deg,var(--bg3) 0%,var(--bg) 100%);
+  overflow:hidden;
+}
+.s6-char {
+  position:absolute;
+  bottom:0; right:-10px;
+  z-index:3; opacity:0;
+}
+.s6-char img {
+  height:68svh; max-height:480px; width:auto;
+  filter:drop-shadow(-8px 0 20px rgba(0,0,0,.6));
+}
+.s6-content {
+  position:relative; z-index:10;
+  padding:56px 20px 40px;
+  width:57%;
+}
+.s6-bubble {
+  margin-bottom:18px; opacity:0;
+}
+.next-info {
+  background:rgba(200,168,75,.08);
+  border:1px solid rgba(200,168,75,.22);
+  border-radius:12px; padding:16px; margin-bottom:12px;
+  opacity:0; transform:translateY(16px);
+}
+.next-info h4 { font-size:12px;letter-spacing:.18em;color:var(--gold);margin-bottom:6px; -webkit-text-fill-color:var(--gold); text-transform:uppercase; }
+.next-info p { font-size:13px;line-height:1.7;color:var(--text2); -webkit-text-fill-color:var(--text2); }
+.coming-chip {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.35);
+  border-radius:20px; padding:6px 13px;
+  font-size:10.5px; color:var(--gold); -webkit-text-fill-color:var(--gold);
+  letter-spacing:.1em; opacity:0; margin-top:6px;
+}
+</style>
+</head>
+<body>
+
+<div class="pdots" id="pdots">
+  <div class="pdot on" id="d0"></div>
+  <div class="pdot" id="d1"></div>
+  <div class="pdot" id="d2"></div>
+  <div class="pdot" id="d3"></div>
+  <div class="pdot" id="d4"></div>
+  <div class="pdot" id="d5"></div>
+</div>
+
+<!-- ══ 씬 1: 인트로 ══ -->
+<section class="scene" id="s1">
+  <div class="s1-badge" id="s1-badge" style="translate: none; rotate: none; scale: none; transform: translate(-50%, 0%) translate(-0.0888px, 0px); opacity: 1;">
+    <div class="bl"></div>
+    <div class="bt">Bucheon Bow Museum</div>
+    <div class="bk">부천시 활박물관</div>
+    <div class="bl" style="margin-top:5px;"></div>
+  </div>
+
+  <!-- 말풍선 먼저, 그 다음 캐릭터 -->
+  <div style="flex:1; display:flex; align-items:flex-end; padding:120px 22px 0; width:100%; z-index:20;">
+  </div>
+  <div class="s1-bubble-wrap" id="s1-bubble" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
+    <div class="bubble tail-bl">
+      오, 여기까지 왔네 😎<br>
+      나는 <b>건호</b>고 여기는 <em>기증자 전시실</em>이야!<br>
+      여기서 <em>두 가지</em>를 소개할게<br><br>
+      🏹 <b>챕터 9</b> — 기증자 전시실, <br>
+      🛠️ <b>챕터 10</b> — 각궁 제작 도구<br><br>
+      천천히 둘러보면서<br>
+      어떤 이야기가 담겨 있는지 함께 알아보자!
+    </div>
+  </div>
+
+  <!-- 정면 캐릭터 아래 -->
+
+  <div class="s1-char" id="s1-char" style="opacity: 1;">
+    <img src="./건호 도슨트_files/hi.png" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">
+  </div>
+
+  <div class="scroll-hint" id="s1-scroll" style="opacity: 1;">
+    <span>SCROLL</span>
+    <div class="sh-arrow"></div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ══ 씬 2: 챕터 1 타이틀 ══ -->
+<section class="scene" id="s2">
+  <div class="ch-label" id="s2-label" style="translate: none; rotate: none; scale: none; transform: translate(-15px, 0px);">Chapter 05</div>
+  <div class="ch-title" id="s2-title" style="translate: none; rotate: none; scale: none; transform: translate(0px, 22px);">기증자<br><span>전시실</span></div>
+  <div class="ch-en" id="s2-en">Donor Exhibition Hall</div>
+  <div class="ch-rule" id="s2-rule"></div>
+  <div class="ch-desc" id="s2-desc" style="translate: none; rotate: none; scale: none; transform: translate(0px, 22px);">
+    한 사람의 기술이 전통이 되고,<br>
+    그 전통이 다음 세대로 이어졌어.<br>
+    이곳에는 궁시장 김장환 선생의 발자취가 담겨 있어.
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ══ 씬 3: 유물 사진 (누끼 없음) ══ -->
+<section class="scene" id="s3">
+  <div class="artifact-glow"></div>
+  <div class="artifact-frame" id="s3-frame" style="translate: none; rotate: none; scale: none; transform: translate3d(0px, -6.4589px, 0px) scale(0.88, 0.88);">
+    <img src="./건호 도슨트_files/kim.jpg">
+  </div>
+  <div class="artifact-caption" id="s3-cap" style="translate: none; rotate: none; scale: none; transform: translate(0px, 16px);">
+    <h2>백인 김장환 선생</h2>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ══ 씬 4: 각궁 든 태용 + 설명 카드 ══
+     캐릭터 정면, 각궁 양손 → 상단 중앙, 텍스트 아래 -->
+<section class="scene" id="s4">
+
+  <div class="s4-char" id="s4-char">
+    <img src="./건호 도슨트_files/Gunho3.png" style="translate: none; rotate: none; scale: none; transform: scale(0.9, 0.9);">
+  </div>
+  <div class="s4-cards">
+    <div class="info-card" id="c1" style="translate: none; rotate: none; scale: none; transform: translate(0px, 24px);">
+      <h3>🏛️ 기증자 전시실</h3>
+      <p>국가무형문화재 제47호 궁시장인 <b>고 김장환 선생의 유품 240점</b>이 전시되어 있어.</p>
+      <p style="margin-top:9px;font-size:13px;color:var(--text2);-webkit-text-fill-color:var(--text2);">각궁과 제작 과정, 그리고 다양한 제작 도구들을 만나볼 수 있어.</p>
+    </div>
+    <div class="info-card" id="c2" style="translate: none; rotate: none; scale: none; transform: translate(0px, 24px);">
+      <h3>🎖️ 궁시장 김장환</h3>
+      <p>김장환 선생은 부천에서 태어나 조부에게 활 제작 기술을 전수받았어.</p>
+      <p style="margin-top:9px;font-size:13px;color:var(--text2);-webkit-text-fill-color:var(--text2);">평생 우리 전통 활 제작 기술을 지켜온 장인이야.</p>
+      <div class="mat-row">
+        <span class="mat-chip" id="m1" style="translate: none; rotate: none; scale: none; transform: scale(0.7, 0.7); opacity: 0;">🏹 국가무형문화재 제47호</span>
+        <span class="mat-chip" id="m2" style="translate: none; rotate: none; scale: none; transform: scale(0.7, 0.7); opacity: 0;">👨‍🏫 궁시장</span>
+        <span class="mat-chip" id="m3" style="translate: none; rotate: none; scale: none; transform: scale(0.7, 0.7); opacity: 0;">📚 한국의 궁시</span>
+        <span class="mat-chip" id="m4" style="translate: none; rotate: none; scale: none; transform: scale(0.7, 0.7); opacity: 0;">🏆 400회 이상 입상</span>
+        <span class="mat-chip" id="m5" style="translate: none; rotate: none; scale: none; transform: scale(0.7, 0.7); opacity: 0;">🔗 150년 전통 계승</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ══ 씬 5: 손가락 포인팅 ══
+     캐릭터: 왼쪽 보며 왼쪽 손가락 → 오른쪽에 배치
+     텍스트: 왼쪽 (캐릭터가 가리키는 방향) -->
+<section class="scene" id="s5">
+  <div class="s5-char" id="s5-char" style="translate: none; rotate: none; scale: none; transform: translate(40px, 0px); opacity: 0;">
+    <img src="./건호 도슨트_files/Gungo1.png">
+  </div>
+  <div class="s5-content">
+    <div class="fact-block" id="f1" style="translate: none; rotate: none; scale: none; transform: translate(-18px, 0px); opacity: 0;">
+      <h4><span class="fact-icon">🏹</span> 150년 전통</h4>
+      <p>김장환 선생의 기술은 아들과 손자, 제자들에게 이어져 현재까지 계승되고 있어.</p>
+    </div>
+    <div class="fact-block" id="f2" style="translate: none; rotate: none; scale: none; transform: translate(-18px, 0px); opacity: 0;">
+      <h4><span class="fact-icon">🏆</span> 궁술의 명인</h4>
+      <p>전국 대회에 600회 이상 출전하여 400회가 넘는 입상 기록을 남겼어.</p>
+    </div>
+    <div class="fact-block" id="f3" style="translate: none; rotate: none; scale: none; transform: translate(-18px, 0px); opacity: 0;">
+      <h4><span class="fact-icon">📖</span> 한국의 궁시</h4>
+      <p>전통 활 제작과 궁술 문화를 기록한 『한국의 궁시』를 집필했어.</p>
+    </div>
+    <div class="fact-block" id="f4" style="translate: none; rotate: none; scale: none; transform: translate(-18px, 0px); opacity: 0;">
+      <h4><span class="fact-icon">🌏</span> 문화유산 보존</h4>
+      <p>장인의 기술과 정신은 오늘날까지 우리 전통 활 문화로 이어지고 있어.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ══ 씬 6: 옆모습 안내 ══
+     캐릭터: 왼쪽 보며 왼손 내밀기 → 오른쪽에 배치
+     텍스트: 왼쪽 (캐릭터가 바라보는/가리키는 방향) -->
+<section class="scene" id="s6">
+  <div class="s6-char" id="s6-char" style="translate: none; rotate: none; scale: none; transform: translate(50px, 0px); opacity: 0;">
+    <img src="./건호 도슨트_files/Gunho2.png">
+  </div>
+  <div class="s6-content">
+    <div class="s6-bubble" id="s6-bubble" style="opacity: 0;">
+      <div class="bubble tail-r">
+        기증자 전시실 이야기는 여기까지야!<br>
+        다음 <b>챕터 11</b>에서는<br>
+        <b>총통</b>을<br>
+        자세히 알아볼 거야 
+      </div>
+    </div>
+    <div class="next-info" id="n1" style="translate: none; rotate: none; scale: none; transform: translate(0px, 14px); opacity: 0;">
+      <h4>📖 다음 챕터 예고</h4>
+      <p>총통에 대해서, 건호가 안내해 줄게!</p>
+    </div>
+    <div class="coming-chip" id="s6-chip" style="opacity: 0;">
+      <span>●</span>
+      <span>CHAPTER 10 · COMING SOON</span>
+    </div>
+  </div>
+</section>
+
+<script src="./건호 도슨트_files/gsap.min.js"></script>
+<script src="./건호 도슨트_files/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── 진행 도트 ── */
+['s1','s2','s3','s4','s5','s6'].forEach((id,i) => {
+  ScrollTrigger.create({
+    trigger:'#'+id,
+    start:'top 55%',
+    end:'bottom 45%',
+    onEnter:()=>setDot(i),
+    onEnterBack:()=>setDot(i),
+  });
+});
+function setDot(i){
+  document.querySelectorAll('.pdot').forEach((d,j)=>d.classList.toggle('on',i===j));
+}
+
+/* ── 씬 1: 인트로 ── */
+const tl1 = gsap.timeline({delay:.3});
+tl1
+  .to('#s1-badge',  {opacity:1, y:0, duration:.7, ease:'power2.out'})
+  .to('#s1-bubble', {opacity:1, y:0, duration:.65, ease:'back.out(1.6)'}, '-=.1')
+  .from('#s1-char img', {y:80, duration:1, ease:'power3.out'}, '-=.3')
+  .to('#s1-char',   {opacity:1, duration:.6}, '<')
+  .to('#s1-scroll', {opacity:1, duration:.5}, '+=.3');
+
+gsap.set('#s1-badge', {y:-10});
+gsap.set('#s1-bubble', {y:15});
+
+/* ── 씬 2: 챕터 타이틀 ── */
+gsap.set(['#s2-title','#s2-desc'], {y:22});
+const tl2 = gsap.timeline({
+  scrollTrigger:{trigger:'#s2', start:'top 68%'}
+});
+tl2
+  .to('#s2-label', {opacity:1, x:0, duration:.5})
+  .to('#s2-title', {opacity:1, y:0, duration:.7, ease:'power3.out'}, '-=.1')
+  .to('#s2-en',    {opacity:1, duration:.5}, '-=.2')
+  .to('#s2-rule',  {width:'55%', duration:.7, ease:'power2.inOut'}, '-=.2')
+  .to('#s2-desc',  {opacity:1, y:0, duration:.6}, '-=.2');
+
+gsap.set('#s2-label', {x:-15});
+
+/* ── 씬 3: 유물 ── */
+gsap.set('#s3-cap', {y:16});
+const tl3 = gsap.timeline({
+  scrollTrigger:{trigger:'#s3', start:'top 65%'}
+});
+tl3
+  .to('#s3-frame', {opacity:1, scale:1, duration:1, ease:'elastic.out(1,.65)'})
+  .to('#s3-cap',   {opacity:1, y:0, duration:.6}, '-=.3');
+
+// 유물 살짝 떠다니기
+gsap.to('#s3-frame', {
+  y:-8, duration:2.8, repeat:-1, yoyo:true,
+  ease:'sine.inOut', delay:1.2
+});
+
+/* ── 씬 4: 각궁 든 태용 + 카드 ── */
+gsap.set(['#c1','#c2'], {y:24});
+const tl4 = gsap.timeline({
+  scrollTrigger:{trigger:'#s4', start:'top 70%'}
+});
+tl4
+  .from('#s4-char img', {scale:.9, duration:.8, ease:'back.out(1.5)'})
+  .to('#s4-char',  {opacity:1, duration:.6}, '<')
+  .to('#c1', {opacity:1, y:0, duration:.6, ease:'power2.out'}, '+=.05')
+  .to('#c2', {opacity:1, y:0, duration:.6, ease:'power2.out'}, '-=.25');
+
+// 재료 칩 순차 팝업
+['m1','m2','m3','m4','m5','m6','m7'].forEach((id,i)=>{
+  gsap.to('#'+id, {
+    opacity:1, scale:1, duration:.35, ease:'back.out(2)',
+    delay: i*.07,
+    scrollTrigger:{trigger:'#c2', start:'top 78%'}
+  });
+  gsap.set('#'+id, {scale:.7});
+});
+
+/* ── 씬 5: 손가락 포인팅 ──
+   캐릭터 오른쪽에서 슬라이드인 (왼쪽 보고 있으므로 오른쪽 배치)
+   텍스트는 왼쪽에서 슬라이드인 */
+gsap.set('#s5-char', {x:40});
+gsap.to('#s5-char', {
+  opacity:1, x:0, duration:.9, ease:'power3.out',
+  scrollTrigger:{trigger:'#s5', start:'top 68%'}
+});
+
+['f1','f2','f3','f4'].forEach((id,i)=>{
+  gsap.to('#'+id, {
+    opacity:1, x:0, duration:.55, ease:'power2.out',
+    delay: i*.12,
+    scrollTrigger:{trigger:'#s5', start:'top 60%'}
+  });
+});
+
+// 패럴랙스 - 캐릭터 조금 느리게
+gsap.to('#s5-char', {
+  y:-30, ease:'none',
+  scrollTrigger:{
+    trigger:'#s5', start:'top bottom', end:'bottom top', scrub:2
+  }
+});
+
+/* ── 씬 6: 옆모습 안내 ──
+   캐릭터 오른쪽에서 등장, 텍스트 왼쪽 */
+gsap.set('#s6-char', {x:50});
+gsap.to('#s6-char', {
+  opacity:1, x:0, duration:.9, ease:'power3.out',
+  scrollTrigger:{trigger:'#s6', start:'top 70%'}
+});
+
+gsap.to('#s6-bubble', {
+  opacity:1, duration:.6, ease:'back.out(1.5)',
+  delay:.35,
+  scrollTrigger:{trigger:'#s6', start:'top 65%'}
+});
+
+gsap.set(['#n1'], {y:14});
+gsap.to('#n1', {
+  opacity:1, y:0, duration:.6,
+  delay:.5,
+  scrollTrigger:{trigger:'#s6', start:'top 60%'}
+});
+gsap.to('#s6-chip', {
+  opacity:1, duration:.5, delay:.8,
+  scrollTrigger:{trigger:'#s6', start:'top 60%'}
+});
+
+gsap.to('#s6-char', {
+  y:-25, ease:'none',
+  scrollTrigger:{
+    trigger:'#s6', start:'top bottom', end:'bottom top', scrub:2
+  }
+});
+</script>
+
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>
