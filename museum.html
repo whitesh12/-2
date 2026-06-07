@@ -95,6 +95,48 @@ body {
 }
 .pdot.on { height:18px; background:var(--gold); }
 
+/* 도슨트 오디오 버튼 */
+.docent-controls {
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:0 22px;
+  position:relative;
+  z-index:30;
+  opacity:0;
+}
+.docent-btn {
+  appearance:none;
+  border:1px solid rgba(200,168,75,.28);
+  border-radius:20px;
+  background:rgba(200,168,75,.1);
+  color:var(--gold2);
+  -webkit-text-fill-color:var(--gold2);
+  padding:6px 12px;
+  font:inherit;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.04em;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 3px 16px rgba(0,0,0,.3);
+  transition:background .25s, border-color .25s, box-shadow .25s, transform .25s, color .25s;
+}
+.docent-btn:hover {
+  transform:translateY(-1px);
+  background:rgba(200,168,75,.16);
+  border-color:rgba(200,168,75,.42);
+  box-shadow:0 4px 18px rgba(200,168,75,.12), 0 4px 20px rgba(0,0,0,.35);
+}
+.docent-btn.is-playing {
+  background:rgba(232,204,128,.18);
+  border-color:rgba(232,204,128,.62);
+  color:var(--gold3);
+  -webkit-text-fill-color:var(--gold3);
+  box-shadow:0 0 16px rgba(232,204,128,.25), 0 4px 20px rgba(0,0,0,.4);
+}
+
 /* ════════════════════════════
    씬 1 — 인트로 (인사하는 건호)
    캐릭터: 정면, 오른손 위로 손 흔들기
@@ -116,6 +158,12 @@ body {
 .s1-badge .bl { width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 5px; }
 .s1-badge .bt { font-size:9.5px;letter-spacing:.32em;color:var(--gold);font-weight:300; -webkit-text-fill-color:var(--gold); }
 .s1-badge .bk { font-size:11px;color:rgba(200,168,75,.55);letter-spacing:.12em;margin-top:3px; -webkit-text-fill-color:rgba(200,168,75,.55); }
+
+#s1 .docent-controls {
+  position:absolute;
+  top:92px;
+  left:0;
+}
 
 .s1-bubble-wrap {
   width:100%; padding:0 22px; z-index:20; opacity:0;
@@ -196,6 +244,11 @@ body {
 .s4-char { opacity:0; z-index:5; }
 .s4-char img { height:300px; width:auto; filter:drop-shadow(0 8px 24px rgba(0,0,0,.6)); }
 
+#s4 .docent-controls {
+  align-self:stretch;
+  padding:18px 20px 0;
+}
+
 .s4-cards {
   width:100%; padding:16px 20px 50px; z-index:10;
 }
@@ -228,6 +281,13 @@ body {
   min-height:100svh;
   background:var(--bg2);
   overflow:hidden;
+}
+#s5 .docent-controls {
+  position:absolute;
+  top:22px;
+  left:0;
+  width:58%;
+  padding:0 20px;
 }
 .s5-char {
   position:absolute;
@@ -264,6 +324,13 @@ body {
   min-height:100svh;
   background:linear-gradient(180deg,var(--bg3) 0%,var(--bg) 100%);
   overflow:hidden;
+}
+#s6 .docent-controls {
+  position:absolute;
+  top:22px;
+  left:0;
+  width:57%;
+  padding:0 20px;
 }
 .s6-char {
   position:absolute;
@@ -319,6 +386,10 @@ body {
     <div class="bl" style="margin-top:5px;"></div>
   </div>
 
+  <div class="docent-controls" id="s1-audio">
+    <button class="docent-btn" type="button" data-audio-src="audio/5_intro.mp3">🎧 기증자 전시실 소개</button>
+  </div>
+
   <!-- 말풍선 먼저, 그 다음 캐릭터 -->
   <div style="flex:1; display:flex; align-items:flex-end; padding:120px 22px 0; width:100%; z-index:20;">
   </div>
@@ -337,7 +408,7 @@ body {
   <!-- 정면 캐릭터 아래 -->
 
   <div class="s1-char" id="s1-char" style="opacity: 1;">
-    <img src="./건호 도슨트_files/hi.png" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">
+    <img src="./건호 도슨트_files/hihi.png" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">
   </div>
 
   <div class="scroll-hint" id="s1-scroll" style="opacity: 1;">
@@ -380,6 +451,10 @@ body {
      캐릭터 정면, 각궁 양손 → 상단 중앙, 텍스트 아래 -->
 <section class="scene" id="s4">
 
+  <div class="docent-controls" id="s4-audio">
+    <button class="docent-btn" type="button" data-audio-src="audio/5_kim.mp3">🎧 김장환 이야기</button>
+  </div>
+
   <div class="s4-char" id="s4-char">
     <img src="./건호 도슨트_files/Gunho3.png" style="translate: none; rotate: none; scale: none; transform: scale(0.9, 0.9);">
   </div>
@@ -410,8 +485,12 @@ body {
      캐릭터: 왼쪽 보며 왼쪽 손가락 → 오른쪽에 배치
      텍스트: 왼쪽 (캐릭터가 가리키는 방향) -->
 <section class="scene" id="s5">
+  <div class="docent-controls" id="s5-audio">
+    <button class="docent-btn" type="button" data-audio-src="audio/5_explanation.mp3">🎧 전통 궁시 이야기</button>
+  </div>
+
   <div class="s5-char" id="s5-char" style="translate: none; rotate: none; scale: none; transform: translate(40px, 0px); opacity: 0;">
-    <img src="./건호 도슨트_files/Gungo1.png">
+    <img src="./건호 도슨트_files/Gunho6.png">
   </div>
   <div class="s5-content">
     <div class="fact-block" id="f1" style="translate: none; rotate: none; scale: none; transform: translate(-18px, 0px); opacity: 0;">
@@ -439,8 +518,12 @@ body {
      캐릭터: 왼쪽 보며 왼손 내밀기 → 오른쪽에 배치
      텍스트: 왼쪽 (캐릭터가 바라보는/가리키는 방향) -->
 <section class="scene" id="s6">
+  <div class="docent-controls" id="s6-audio">
+    <button class="docent-btn" type="button" data-audio-src="audio/5_outro.mp3">🎧 관람을 마치며</button>
+  </div>
+
   <div class="s6-char" id="s6-char" style="translate: none; rotate: none; scale: none; transform: translate(50px, 0px); opacity: 0;">
-    <img src="./건호 도슨트_files/Gunho2.png">
+    <img src="./건호 도슨트_files/Gunho7.png">
   </div>
   <div class="s6-content">
     <div class="s6-bubble" id="s6-bubble" style="opacity: 0;">
@@ -482,10 +565,83 @@ function setDot(i){
   document.querySelectorAll('.pdot').forEach((d,j)=>d.classList.toggle('on',i===j));
 }
 
+function createDocentAudioPlayer(root=document) {
+  const buttons = Array.from(root.querySelectorAll('[data-audio-src]'));
+  const tracks = new Map();
+  let activeButton = null;
+  let activeAudio = null;
+
+  function setButtonState(button, isPlaying) {
+    button.classList.toggle('is-playing', isPlaying);
+    button.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+  }
+
+  function getAudio(button) {
+    if (!tracks.has(button)) {
+      const audio = new Audio(button.dataset.audioSrc);
+      audio.preload = 'none';
+      audio.addEventListener('ended', () => {
+        audio.currentTime = 0;
+        setButtonState(button, false);
+        if (activeAudio === audio) {
+          activeAudio = null;
+          activeButton = null;
+        }
+      });
+      tracks.set(button, audio);
+    }
+    return tracks.get(button);
+  }
+
+  function stopActiveTrack() {
+    if (!activeAudio || !activeButton) return;
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
+    setButtonState(activeButton, false);
+    activeAudio = null;
+    activeButton = null;
+  }
+
+  buttons.forEach(button => {
+    button.setAttribute('aria-pressed', 'false');
+    button.addEventListener('click', () => {
+      const audio = getAudio(button);
+
+      if (activeButton === button && !audio.paused) {
+        audio.pause();
+        setButtonState(button, false);
+        return;
+      }
+
+      if (activeButton && activeButton !== button) {
+        stopActiveTrack();
+      }
+
+      activeButton = button;
+      activeAudio = audio;
+
+      audio.play()
+        .then(() => setButtonState(button, true))
+        .catch(() => {
+          setButtonState(button, false);
+          if (activeAudio === audio) {
+            activeAudio = null;
+            activeButton = null;
+          }
+        });
+    });
+  });
+}
+
+createDocentAudioPlayer(document);
+
+gsap.set(['#s1-audio','#s4-audio','#s5-audio','#s6-audio'], {y:-6});
+
 /* ── 씬 1: 인트로 ── */
 const tl1 = gsap.timeline({delay:.3});
 tl1
   .to('#s1-badge',  {opacity:1, y:0, duration:.7, ease:'power2.out'})
+  .to('#s1-audio', {opacity:1, y:0, duration:.45, ease:'power2.out'}, '-=.25')
   .to('#s1-bubble', {opacity:1, y:0, duration:.65, ease:'back.out(1.6)'}, '-=.1')
   .from('#s1-char img', {y:80, duration:1, ease:'power3.out'}, '-=.3')
   .to('#s1-char',   {opacity:1, duration:.6}, '<')
@@ -529,6 +685,7 @@ const tl4 = gsap.timeline({
   scrollTrigger:{trigger:'#s4', start:'top 70%'}
 });
 tl4
+  .to('#s4-audio', {opacity:1, y:0, duration:.45, ease:'power2.out'})
   .from('#s4-char img', {scale:.9, duration:.8, ease:'back.out(1.5)'})
   .to('#s4-char',  {opacity:1, duration:.6}, '<')
   .to('#c1', {opacity:1, y:0, duration:.6, ease:'power2.out'}, '+=.05')
@@ -548,6 +705,10 @@ tl4
    캐릭터 오른쪽에서 슬라이드인 (왼쪽 보고 있으므로 오른쪽 배치)
    텍스트는 왼쪽에서 슬라이드인 */
 gsap.set('#s5-char', {x:40});
+gsap.to('#s5-audio', {
+  opacity:1, y:0, duration:.45, ease:'power2.out',
+  scrollTrigger:{trigger:'#s5', start:'top 68%'}
+});
 gsap.to('#s5-char', {
   opacity:1, x:0, duration:.9, ease:'power3.out',
   scrollTrigger:{trigger:'#s5', start:'top 68%'}
@@ -572,6 +733,10 @@ gsap.to('#s5-char', {
 /* ── 씬 6: 옆모습 안내 ──
    캐릭터 오른쪽에서 등장, 텍스트 왼쪽 */
 gsap.set('#s6-char', {x:50});
+gsap.to('#s6-audio', {
+  opacity:1, y:0, duration:.45, ease:'power2.out',
+  scrollTrigger:{trigger:'#s6', start:'top 70%'}
+});
 gsap.to('#s6-char', {
   opacity:1, x:0, duration:.9, ease:'power3.out',
   scrollTrigger:{trigger:'#s6', start:'top 70%'}
