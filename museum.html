@@ -357,12 +357,62 @@ body {
 }
 .next-info h4 { font-size:12px;letter-spacing:.18em;color:var(--gold);margin-bottom:6px; -webkit-text-fill-color:var(--gold); text-transform:uppercase; }
 .next-info p { font-size:13px;line-height:1.7;color:var(--text2); -webkit-text-fill-color:var(--text2); }
-.coming-chip {
-  display:inline-flex; align-items:center; gap:5px;
-  background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.35);
-  border-radius:20px; padding:6px 13px;
-  font-size:10.5px; color:var(--gold); -webkit-text-fill-color:var(--gold);
-  letter-spacing:.1em; opacity:0; margin-top:6px;
+    .coming-chip {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+
+  width:auto;
+  min-height:52px;
+  padding:0 20px;
+
+  background:linear-gradient(135deg, #efd983, #d3ad48);
+  border:1px solid rgba(244,220,137,.72);
+
+  border-radius:18px;
+
+  font-size:16px;
+  font-weight:900;
+  color:#050509;
+  -webkit-text-fill-color:#050509;
+  letter-spacing:.06em;
+
+  opacity:0;
+  margin-top:22px;
+
+  text-decoration:none;
+
+  box-shadow:
+    0 6px 16px rgba(201,168,75,.15),
+    inset 0 1px 0 rgba(255,255,255,.20);
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    filter .22s ease;
+}
+
+.coming-chip:hover {
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 10px 22px rgba(201,168,75,.25),
+    inset 0 1px 0 rgba(255,255,255,.28);
+
+  filter:saturate(1.05);
+}
+
+.coming-chip .chip-dot {
+  font-size:14px;
+  line-height:1;
+}
+
+.coming-chip .chip-arrow {
+  font-size:23px;
+  line-height:1;
+  margin-left:2px;
+  transform:translateY(-1px);
 }
 </style>
 </head>
@@ -539,10 +589,11 @@ body {
       <p>새로운 무기와 총통에 대해서, <br>
         건호가 안내해 줄게!</p>
     </div>
-    <div class="coming-chip" id="s6-chip" style="opacity: 0;">
-      <span>●</span>
-      <span>CHAPTER 6 · COMING SOON</span>
-    </div>
+        <a class="coming-chip" id="s6-chip" href="./museum6.html" aria-label="챕터 6 페이지로 이동" style="opacity: 0;">
+          <span class="chip-dot">●</span>
+          <span>CHAPTER 6 · 바로가기</span>
+          <span class="chip-arrow">›</span>
+        </a>
   </div>
 </section>
 
